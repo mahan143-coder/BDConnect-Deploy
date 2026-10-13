@@ -91,9 +91,14 @@ def preview(section):
 def health():
     return {"status": "ok", "mode": "read-only-showcase"}
 
+
+# BDConnect fictional-data portal previews
+from demo_portals import demo_bp
+app.register_blueprint(demo_bp)
 if __name__ == "__main__":
     app.run(
         host="127.0.0.1",
         port=int(os.environ.get("PORT", "5000")),
         debug=False
     )
+

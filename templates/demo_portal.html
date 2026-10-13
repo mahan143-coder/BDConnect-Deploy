@@ -1,0 +1,232 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ portal.title }} | BDConnect Demo{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='demo_portal.css') }}">
+
+<div class="dp-layout">
+    <aside class="dp-sidebar">
+        <div class="dp-sidebar-title">DEMO WORKSPACES</div>
+        {% for key, info in portals.items() %}
+        <a class="dp-nav-link {% if role == key %}selected{% endif %}"
+           href="{{ url_for('demo.demo_portal', role=key) }}">
+            <span class="dp-nav-icon">{{ info.icon }}</span>
+            <span>{{ info.title }}</span>
+            {% if role == key %}<span class="dp-nav-arrow">›</span>{% endif %}
+        </a>
+        {% endfor %}
+        <div class="dp-sidebar-bottom">
+            <span class="dp-live-dot"></span> SANDBOX PREVIEW
+            <p>Fictional records only. No database or live integrations.</p>
+        </div>
+    </aside>
+
+    <div class="dp-main">
+        <div class="dp-topline">
+            <div>
+                <div class="dp-breadcrumb">BDConnect / Demo / {{ portal.title }}</div>
+                <h1>{{ portal.title }}</h1>
+                <p>{{ portal.subtitle }}</p>
+            </div>
+            <div class="dp-avatar">{{ portal.icon }}</div>
+        </div>
+
+        <div class="dp-alert">
+            <strong>DEMONSTRATION MODE</strong>
+            <span>All names, booking IDs, figures and statuses are fictional. This portal is read-only.</span>
+        </div>
+
+        <div class="dp-metrics">
+            {% for label, value, description in portal.metrics %}
+            <div class="dp-metric">
+                <div class="dp-metric-label">{{ label }}</div>
+                <div class="dp-metric-value">{{ value }}</div>
+                <div class="dp-metric-foot">{{ description }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if role == "patient" %}
+        <div class="dp-section-head">
+            <div><span class="dp-kicker">PATIENT EXPERIENCE</span><h2>Explore Diagnostic Tests</h2></div>
+            <span class="dp-outline-tag">Sample prices</span>
+        </div>
+        <div class="dp-test-grid">
+            {% for test in tests %}
+            <div class="dp-test-card">
+                <div class="dp-test-symbol">✚</div>
+                <div class="dp-category">{{ test.category }}</div>
+                <h3>{{ test.name }}</h3>
+                <div class="dp-test-bottom">
+                    <strong>₹{{ test.price }}</strong>
+                    <span class="dp-fake-button">Preview only</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="dp-two-columns">
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Booking Journey</h2><span>DEMO FLOW</span></div>
+                <div class="dp-timeline">
+                    <div><b>1</b><span><strong>Select Tests</strong><small>Choose investigations</small></span></div>
+                    <div><b>2</b><span><strong>Collection Details</strong><small>Choose a fictional appointment</small></span></div>
+                    <div><b>3</b><span><strong>Technician Assigned</strong><small>Sample allocation stage</small></span></div>
+                    <div><b>4</b><span><strong>Digital Report</strong><small>Preview final milestone</small></span></div>
+                </div>
+            </section>
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Recent Bookings</h2><span>FICTIONAL</span></div>
+                {% for booking in bookings %}
+                <div class="dp-booking">
+                    <div><strong>{{ booking.id }}</strong><small>{{ booking.tests }}</small></div>
+                    <span class="dp-status {{ booking.tone }}">{{ booking.status }}</span>
+                </div>
+                {% endfor %}
+                <div class="dp-info">Report downloads, OTP and booking submission are not enabled.</div>
+            </section>
+        </div>
+
+        {% elif role == "technician" %}
+        <div class="dp-section-head">
+            <div><span class="dp-kicker">FIELD OPERATIONS</span><h2>Today's Sample Assignments</h2></div>
+            <span class="dp-outline-tag">Sample schedule</span>
+        </div>
+        <section class="dp-panel">
+            <div class="dp-table-scroll">
+                <table class="dp-table">
+                    <thead><tr><th>Booking</th><th>Patient</th><th>Zone</th><th>Time</th><th>Tests</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td><strong>{{ job.id }}</strong></td>
+                        <td>{{ job.patient }}</td>
+                        <td>{{ job.location }}</td>
+                        <td>{{ job.time }}</td>
+                        <td>{{ job.tests }}</td>
+                        <td><span class="dp-status {{ job.tone }}">{{ job.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="dp-two-columns">
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Collection Checklist</h2><span>ILLUSTRATIVE</span></div>
+                <div class="dp-checklist">
+                    <div><span>✓</span> Review collection assignment</div>
+                    <div><span>✓</span> Verify specimen requirements</div>
+                    <div><span>✓</span> Follow patient identification protocol</div>
+                    <div><span>✓</span> Label and package specimens</div>
+                    <div><span>✓</span> Arrange partner laboratory handover</div>
+                </div>
+            </section>
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Collection Tracking</h2><span>SAMPLE RECORD</span></div>
+                <div class="dp-track">
+                    <div><span></span><strong>Assignment received</strong><small>08:00 AM</small></div>
+                    <div><span></span><strong>Collector dispatched</strong><small>08:15 AM</small></div>
+                    <div><span></span><strong>Sample collected</strong><small>08:40 AM</small></div>
+                    <div><span></span><strong>Laboratory handover</strong><small>09:20 AM</small></div>
+                </div>
+            </section>
+        </div>
+
+        {% elif role == "lab" %}
+        <div class="dp-section-head">
+            <div><span class="dp-kicker">LABORATORY OPERATIONS</span><h2>Specimen Processing Queue</h2></div>
+            <span class="dp-outline-tag">Sample accession data</span>
+        </div>
+        <section class="dp-panel">
+            <div class="dp-table-scroll">
+                <table class="dp-table">
+                    <thead><tr><th>Specimen ID</th><th>Booking</th><th>Sample Type</th><th>Investigation</th><th>Processing Status</th></tr></thead>
+                    <tbody>
+                    {% for sample in samples %}
+                    <tr>
+                        <td><strong>{{ sample.id }}</strong></td>
+                        <td>{{ sample.booking }}</td>
+                        <td>{{ sample.sample }}</td>
+                        <td>{{ sample.test }}</td>
+                        <td><span class="dp-status {{ sample.tone }}">{{ sample.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="dp-two-columns">
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Processing Stages</h2><span>WORKFLOW PREVIEW</span></div>
+                <div class="dp-timeline">
+                    <div><b>1</b><span><strong>Specimen Receipt</strong><small>Check received samples</small></span></div>
+                    <div><b>2</b><span><strong>Accessioning</strong><small>Confirm identifiers and tests</small></span></div>
+                    <div><b>3</b><span><strong>Analysis</strong><small>Laboratory processing</small></span></div>
+                    <div><b>4</b><span><strong>Verification</strong><small>Authorized result review</small></span></div>
+                </div>
+            </section>
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Quality Overview</h2><span>FICTIONAL</span></div>
+                <div class="dp-progress-label"><span>Samples processed</span><strong>72%</strong></div>
+                <div class="dp-progress"><span style="width:72%"></span></div>
+                <div class="dp-progress-label"><span>Reports verified</span><strong>58%</strong></div>
+                <div class="dp-progress"><span style="width:58%"></span></div>
+                <div class="dp-progress-label"><span>Handover completed</span><strong>91%</strong></div>
+                <div class="dp-progress"><span style="width:91%"></span></div>
+                <div class="dp-info">No real test results or report files are accessible.</div>
+            </section>
+        </div>
+
+        {% elif role == "admin" %}
+        <div class="dp-section-head">
+            <div><span class="dp-kicker">BUSINESS OPERATIONS</span><h2>Booking Management</h2></div>
+            <span class="dp-outline-tag">Sample activity</span>
+        </div>
+        <section class="dp-panel">
+            <div class="dp-table-scroll">
+                <table class="dp-table">
+                    <thead><tr><th>Booking ID</th><th>Patient</th><th>Investigations</th><th>Technician</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for booking in admin_bookings %}
+                    <tr>
+                        <td><strong>{{ booking.id }}</strong></td>
+                        <td>{{ booking.patient }}</td>
+                        <td>{{ booking.tests }}</td>
+                        <td>{{ booking.technician }}</td>
+                        <td><span class="dp-status {{ booking.tone }}">{{ booking.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="dp-two-columns">
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Collection Performance</h2><span>ILLUSTRATIVE</span></div>
+                <div class="dp-chart">
+                    {% for day, value in [("Mon",48),("Tue",72),("Wed",55),("Thu",86),("Fri",68),("Sat",94),("Sun",62)] %}
+                    <div class="dp-chart-column">
+                        <div class="dp-bar-track"><span style="height:{{ value }}%"></span></div>
+                        <small>{{ day }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="dp-panel">
+                <div class="dp-panel-title"><h2>Operational Breakdown</h2><span>DEMO METRICS</span></div>
+                <div class="dp-progress-label"><span>Collections completed</span><strong>73%</strong></div>
+                <div class="dp-progress"><span style="width:73%"></span></div>
+                <div class="dp-progress-label"><span>Reports delivered</span><strong>64%</strong></div>
+                <div class="dp-progress"><span style="width:64%"></span></div>
+                <div class="dp-progress-label"><span>Technician allocation</span><strong>89%</strong></div>
+                <div class="dp-progress"><span style="width:89%"></span></div>
+                <div class="dp-info">Revenue and performance figures are entirely fictional.</div>
+            </section>
+        </div>
+        {% endif %}
+
+        <div class="dp-bottom-note">
+            BDConnect Showcase · Read-only fictional data · No real patient or business information
+        </div>
+    </div>
+</div>
+{% endblock %}
