@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block title %}{{ item.title }} | BDConnect{% endblock %}
+{% block content %}
+<section class="preview-head">
+  <div class="container">
+    <a class="back" href="/">&larr; Back to overview</a>
+    <span class="eyebrow">READ-ONLY WORKFLOW PREVIEW</span>
+    <h1>{{ item.title }}</h1>
+    <p>{{ item.subtitle }}</p>
+    <div class="warning">Fictional demonstration only. No real patient records, bookings, OTP verification, payments or medical reports.</div>
+  </div>
+</section>
+<section class="section">
+  <div class="container preview-grid">
+    <nav class="sidebar">
+      <strong>PLATFORM AREAS</strong>
+      <a class="{% if section == 'booking' %}active{% endif %}" href="/preview/booking">Patient Booking</a>
+      <a class="{% if section == 'technician' %}active{% endif %}" href="/preview/technician">Technician Mobile</a>
+      <a class="{% if section == 'lab' %}active{% endif %}" href="/preview/lab">Partner Laboratory</a>
+      <a class="{% if section == 'admin' %}active{% endif %}" href="/preview/admin">Admin Dashboard</a>
+      <small>DEMONSTRATION ONLY<br>No operational services connected.</small>
+    </nav>
+    <div class="workflow">
+      <div class="workflow-title">
+        <div><span class="eyebrow">SAMPLE WORKFLOW</span><h2>How it works</h2></div>
+        <span class="sample-pill">DEMO ONLY</span>
+      </div>
+      {% for number, title, description in item.steps %}
+      <div class="step">
+        <span class="number">{{ number }}</span>
+        <div><h3>{{ title }}</h3><p>{{ description }}</p></div>
+        <b>&#10003;</b>
+      </div>
+      {% endfor %}
+      <div class="summary">
+        <strong>About this preview</strong>
+        <p>These steps describe a fictional workflow. No information is stored or used to create an actual booking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

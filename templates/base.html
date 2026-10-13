@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="BDConnect diagnostic sample collection platform showcase.">
+    <title>{% block title %}BDConnect{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav">
+            <a class="brand" href="/">
+                <span class="brand-symbol">B</span>
+                <span>BD<span class="brand-accent">Connect</span></span>
+            </a>
+            <span class="demo-label">READ-ONLY DEMO</span>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>
+                <strong>BDConnect</strong>
+                <p>Connected diagnostics. Simplified operations.</p>
+            </div>
+            <div class="footer-note">
+                Demonstration only. No real bookings, patient records,
+                OTPs, payments, or medical reports are processed.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
